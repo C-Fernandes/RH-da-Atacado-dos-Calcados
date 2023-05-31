@@ -1,6 +1,6 @@
 #ifndef PESSOA_HEADER
 #define PESSOA_HEADER
-#include "util.hpp"
+#include "./util.hpp"
 #include <iostream>
 class Pessoa
 {
@@ -21,5 +21,7 @@ public:
     void setEstadoCivil(std::string estadoCivil);
     Endereco getEnderecoPessoal();
     void setEnderecoPessoal(std::string cidade, std::string bairro, std::string rua, std::string cep, int numero);
+    int getQuantFilhos();
+    void setQuantFilhos(int quatFilhos);
 };
 #endif

@@ -17,4 +17,7 @@ void Pessoa::setEnderecoPessoal(std::string cidade, std::string bairro, std::str
     this->EnderecoPessoal.cidade = cidade;
     this->EnderecoPessoal.numero = numero;
     this->EnderecoPessoal.rua = rua;
-};
+}
+int Pessoa::getQuantFilhos() { return this->quantFilhos; };
+void Pessoa::setQuantFilhos(int quatFilhos) { this->quantFilhos = quatFilhos; };
+;

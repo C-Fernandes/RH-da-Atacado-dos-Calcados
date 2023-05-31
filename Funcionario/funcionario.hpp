@@ -1,14 +1,14 @@
 #ifndef FUNCIONARIO_HEADER
 #define FUNCIONARIO_HEADER
-#include "util.hpp"
+#include "./util.hpp"
 class Funcionario
 {
     std::string salario, matricula;
     Data ingressoEmpresa;
 
 public:
-    float calcularSalario(int diasFaltas) = 0;
-    float calcularRecisao(Data desligamento) = 0;
+    virtual float calcularSalario(int diasFaltas) = 0;
+    virtual float calcularRecisao(Data desligamento) = 0;
     std::string getSalario();
     void setSalario(std::string salario);
     std::string getMatricula();

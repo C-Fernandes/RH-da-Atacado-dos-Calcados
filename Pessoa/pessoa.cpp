@@ -1,6 +1,17 @@
 #include "pessoa.hpp"
 
-Pessoa::Pessoa(std::string nome, std::string cpf, std::string dataNasciment, std::string estado, std::string cidade, std::string bairro, std::string rua, std::string cep, int numero, int quatFilhos){};
+Pessoa::Pessoa(std::string nome, std::string cpf, std::string dataNasciment,  std::string estadoCivil, std::string cidade, std::string bairro, std::string rua, std::string cep, int numero, int quantFilhos){
+    this->nome = nome;
+    this->cpf = cpf;
+    this->dataNascimento = dataNasciment;
+    this->EnderecoPessoal.bairro = bairro;
+    this->EnderecoPessoal.rua = rua;
+    this->EnderecoPessoal.cep = cep;
+    this->EnderecoPessoal.numero = numero;
+    this->EnderecoPessoal.cidade = cidade;
+    this->quantFilhos = quantFilhos;
+    this->estadoCivil = estadoCivil;
+};
 std::string Pessoa::getNome() { return this->nome; };
 void Pessoa::setNome(std::string nome) { this->nome = nome; };
 std::string Pessoa::getCpf() { return this->cpf; };

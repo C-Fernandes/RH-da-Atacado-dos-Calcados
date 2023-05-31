@@ -10,7 +10,7 @@ class Pessoa
 
 public:
     Pessoa();
-    Pessoa(std::string nome, std::string cpf, std::string dataNasciment, std::string estadoCivil, std::string cidade, std::string bairro, std::string rua, std::string cep, int numero, int quatFilhos);
+    Pessoa(std::string nome, std::string cpf, std::string dataNasciment,  std::string estadoCivil,std::string cidade, std::string bairro, std::string rua, std::string cep, int numero, int quantFilhos);
     std::string getNome();
     void setNome(std::string nome);
     std::string getCpf();

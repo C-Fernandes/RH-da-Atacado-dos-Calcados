@@ -32,11 +32,11 @@ public:
     std::vector<Gerente> getGerentes();
     vector<string> separadorLinha(string leitura);
     void carregarFuncoes();
-    void carregarEmpresa(Data hoje);
+    void carregarEmpresa(int dia, int mes, int ano);
     void carregarAsg();
     void carregarVendedor();
     void carregarGerente();
-    Pessoa carregarDono();
+    void carregarDono();
     void imprimeAsgs();
     void imprimeVendendores();
     void imprimeGerentes();

@@ -1,12 +1,12 @@
 #include "gerente.hpp"
 
-Gerente::Gerente(std::string nome, std::string cpf, std::string estadoCivil, std::string dataNasciment, std::string cidade, std::string bairro, std::string rua, std::string cep, int numero, int quantFilhos,
+Gerente::Gerente(std::string nome, std::string cpf, std::string estadoCivil, int diaN, int mesN, int anoN, std::string cidade, std::string bairro, std::string rua, std::string cep, int numero, int quantFilhos,
                  std::string salario, std::string matricula, int dia, int mes, int ano, float participacaoLucros)
 {
     setNome(nome);
     setCpf(cpf);
     setEstadoCivil(estadoCivil);
-    setDataNascimento(dataNasciment);
+    setDataNascimento(dia, mes, ano);
     setEnderecoPessoal(cidade, bairro, rua, cep, numero);
     setQuantFilhos(quantFilhos);
     setSalario(salario);

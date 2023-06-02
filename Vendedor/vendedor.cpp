@@ -1,11 +1,11 @@
 #include "vendedor.hpp"
 
-Vendedor::Vendedor(std::string nome, std::string cpf, std::string estadoCivil, std::string dataNasciment, std::string cidade, std::string bairro, std::string rua, std::string cep, int numero, int quantFilhos,
+Vendedor::Vendedor(std::string nome, std::string cpf, std::string estadoCivil,int diaN, int mesN, int anoN, std::string cidade, std::string bairro, std::string rua, std::string cep, int numero, int quantFilhos,
                    std::string salario, std::string matricula, int dia, int mes, int ano, char tipoVendedor)
 {
     setNome(nome);
     setCpf(cpf);
-    setDataNascimento(dataNasciment);
+    setDataNascimento(diaN, mesN, anoN);
     setEnderecoPessoal(cidade, bairro, rua, cep, numero);
     setSalario(salario);
     setQuantFilhos(quantFilhos);

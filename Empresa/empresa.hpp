@@ -4,6 +4,7 @@
 #include "./Vendedor/vendedor.hpp"
 #include "./ASG/asg.hpp"
 #include "./Gerente/gerente.hpp"
+#include "./Pessoa/pessoa.hpp"
 #include <vector>
 
 class Empresa
@@ -29,7 +30,8 @@ public:
     std::vector<Asg> getAsg();
     std::vector<Vendedor> getVendedores();
     std::vector<Gerente> getGerentes();
-    void carregaFuncoes();
+    vector<string> separadorLinha(string leitura);
+    void carregarFuncoes();
     void carregarEmpresa();
     void carregarAsg();
     void carregarVendedor();

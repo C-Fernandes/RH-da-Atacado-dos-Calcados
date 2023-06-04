@@ -1,19 +1,17 @@
 #include <iostream>
 #include <fstream>
-#include <cstring>
-#include <string>
 #include "empresa.hpp"
 
 using namespace std;
 
-Empresa::Empresa(string nomeEmpresa, string cnpj, float faturamentoMensal, int dia, int mes, int ano)
+Empresa::Empresa(string nomeEmpresa, string cnpj, float faturamentoMensal, Data dataHoje)
 {
     this->nomeEmpresa = nomeEmpresa;
     this->cnpj = cnpj;
     this->faturamentoMensal = faturamentoMensal;
-    this->hoje.dia = dia;
-    this->hoje.mes = mes;
-    this->hoje.ano = ano;
+    this->hoje.dia = dataHoje.dia;
+    this->hoje.mes = dataHoje.mes;
+    this->hoje.ano = dataHoje.ano;
 };
 float Empresa::getFaturamentoMensal() { return this->faturamentoMensal; };
 void Empresa::setFaturamentoMensal(float faturamento) { this->faturamentoMensal = faturamento; };

@@ -19,7 +19,7 @@ class Empresa
 
 public:
     Empresa();
-    Empresa(std::string nomeEmpresa, std::string cnpj, float faturamentoMensal, int dia, int mes, int ano);
+    Empresa(std::string nomeEmpresa, std::string cnpj, float faturamentoMensal, Data dataHoje);
     float getFaturamentoMensal();
     void setFaturamentoMensal(float faturamento);
     std::string getNomeEmpresa();

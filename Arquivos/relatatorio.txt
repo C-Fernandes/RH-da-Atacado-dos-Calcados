@@ -1,0 +1,20 @@
+######### Relatório Financeiro ########
+
+Cargo: ASG
+72.345.02 - Pedro Costa Nunes - R$ 1403.03
+72.154.89 -Luiz Alberto Maranhã - R$ 1587.04
+Total ASG: 2990.07
+
+Cargo: Vendedor
+72.348.01 - Alberto Costa de Souza - R$ 1810.83
+72.547.21 - Paulo de Oliveira  - R$ 1713.07
+72.721.10 - Carlos de Antunes  - R$ 1521.59
+72.632.96 - Alex de Paula Abreu  - R$ 1721.43
+72.632.96 - Julio Cesar Santos  - R$ 2021.43
+Total Vendedor:: 8788.35
+
+Cargo: Gerente
+72.345.02 - Gustavo Bulhões Cunha - R$ 3023.76
+Total Vendedor:: 3023.76
+
+CUSTO TOTAL DE RH: R$ 14,802.18

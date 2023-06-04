@@ -2,7 +2,7 @@
 #define GERENTE_HEADER
 #include "./Pessoa/pessoa.hpp"
 #include "./Funcionario/funcionario.hpp"
-class Gerente : public Pessoa, Funcionario
+class Gerente : public Pessoa, public Funcionario
 {
     float participacaoLucros;
 

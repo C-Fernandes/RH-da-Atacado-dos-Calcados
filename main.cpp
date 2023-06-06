@@ -1,6 +1,5 @@
 #include <iostream>
 #include "Empresa/empresa.hpp"
-#include <math.h>
 #include "util.hpp"
 
 int main(int argc, char const *argv[])

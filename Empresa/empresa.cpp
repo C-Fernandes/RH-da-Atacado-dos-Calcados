@@ -28,9 +28,27 @@ void Empresa::carregarFuncoes()
     fstream arq;
     arq.open("./Arquivos/funcoes.txt", ios::in);
     string linha;
-    vector<string> palavras;
+    vector<string> linhas;
     while (getline(arq, linha))
     {
+        linhas.push_back(linha);
+    }
+    for (int i = 0; i < linhas.size(); i++)
+    {
+        if (linhas[i] == "carregarEmpresa()")
+            carregarEmpresa(this->hoje.dia, this->hoje.mes, this->hoje.ano);
+        if (linhas[i] == "carregarAsg()")
+            carregarAsg();
+        if (linhas[i] == "carregarVendedore()")
+            carregarVendedor();
+        if (linhas[i] == "carregarGerente()")
+            carregarGerente();
+        if (linhas[i] == "carregaDono()")
+            carregarDono();
+        if (linhas[i] == "carregarFuncionario()")
+            buscaFuncionario(stoi(linhas[++i]));
+        if (linhas[i] == "calculaSalarioFuncionario()")
+            cacularSalarioFuncionario(stoi(linhas[++i]));
     }
 };
 void Empresa::carregarEmpresa(int dia, int mes, int ano)
@@ -39,22 +57,19 @@ void Empresa::carregarEmpresa(int dia, int mes, int ano)
     arq.open("./Arquivos/empresa.txt", ios::in);
     string linha;
     int contador;
-    vector<string> palavras;
     while (getline(arq, linha))
     {
-        palavras = separadorLinha(linha);
 
         if (contador == 5)
         {
             contador = 0;
         }
-        if (contador >= 3)
+        if (contador >= 2)
         {
-            palavras.push_back(linha);
+            cout << linha << endl;
         }
         contador++;
     }
-    Empresa empresa(palavras[0], palavras[1], stod(palavras[2]), dia, mes, ano);
 };
 void Empresa::carregarAsg()
 {

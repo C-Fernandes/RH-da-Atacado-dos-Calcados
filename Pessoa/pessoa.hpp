@@ -1,6 +1,6 @@
 #ifndef PESSOA_HEADER
 #define PESSOA_HEADER
-#include "./util.hpp"
+#include "../util.hpp"
 #include <iostream>
 class Pessoa
 {

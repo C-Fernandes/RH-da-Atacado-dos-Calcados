@@ -1,8 +1,8 @@
 #ifndef ASG_HEADER
 #define ASG_HEADER
 
-#include "./Pessoa/pessoa.hpp"
-#include "./Funcionario/funcionario.hpp"
+#include "../Pessoa/pessoa.hpp"
+#include "../Funcionario/funcionario.hpp"
 
 class Asg : public Funcionario, public Pessoa
 {

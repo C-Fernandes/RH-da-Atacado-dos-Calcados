@@ -1,10 +1,10 @@
 #ifndef EMPRESA_HEADER
 #define EMPRESA_HEADER
 
-#include "./Vendedor/vendedor.hpp"
-#include "./ASG/asg.hpp"
-#include "./Gerente/gerente.hpp"
-#include "./Pessoa/pessoa.hpp"
+#include "../Vendedor/vendedor.hpp"
+#include "../ASG/asg.hpp"
+#include "../Gerente/gerente.hpp"
+#include "../Pessoa/pessoa.hpp"
 #include <vector>
 
 class Empresa
@@ -30,7 +30,6 @@ public:
     std::vector<Asg> getAsg();
     std::vector<Vendedor> getVendedores();
     std::vector<Gerente> getGerentes();
-    vector<string> separadorLinha(string leitura);
     void carregarFuncoes();
     void carregarEmpresa(int dia, int mes, int ano);
     void carregarAsg();

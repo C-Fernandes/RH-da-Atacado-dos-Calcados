@@ -1,8 +1,8 @@
 #ifndef VENDEDOR_HEADER
 #define VENDEDOR_HEADER
 
-#include "./Pessoa/pessoa.hpp"
-#include "./Funcionario/funcionario.hpp"
+#include "../Pessoa/pessoa.hpp"
+#include "../Funcionario/funcionario.hpp"
 
 class Vendedor : public Pessoa, public Funcionario
 {

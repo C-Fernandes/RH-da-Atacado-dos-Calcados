@@ -1,6 +1,6 @@
 #ifndef FUNCIONARIO_HEADER
 #define FUNCIONARIO_HEADER
-#include "./util.hpp"
+#include "../util.hpp"
 class Funcionario
 {
     std::string salario, matricula;

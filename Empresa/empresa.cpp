@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <vector>
 #include "empresa.hpp"
 
 using namespace std;
@@ -26,7 +27,7 @@ vector<Gerente> Empresa::getGerentes() { return this->gerentes; };
 void Empresa::carregarFuncoes()
 {
     fstream arq;
-    arq.open("./Arquivos/funcoes.txt", ios::in);
+    arq.open("../Arquivos/funcoes.txt", ios::in);
     string linha;
     vector<string> linhas;
     while (getline(arq, linha))
@@ -49,6 +50,16 @@ void Empresa::carregarFuncoes()
             buscaFuncionario(stoi(linhas[++i]));
         if (linhas[i] == "calculaSalarioFuncionario()")
             cacularSalarioFuncionario(stoi(linhas[++i]));
+        if (linhas[i] == "calculaTodosOsSalarios()")
+            calcularTodoOsSalarios();
+        if (linhas[i] == "calcularRecisao()")
+        {
+            Data data;
+            data.dia = stoi(linhas[i + 4]);
+            data.mes = stoi(linhas[i + 3]);
+            data.ano = stoi(linhas[i + 2]);
+            calcularRecisao(++i, data);
+        }
     }
 };
 void Empresa::carregarEmpresa(int dia, int mes, int ano)

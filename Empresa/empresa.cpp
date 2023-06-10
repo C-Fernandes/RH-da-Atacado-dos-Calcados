@@ -90,15 +90,22 @@ void Empresa::carregarFuncoes()
             carregarEmpresa(this->hoje.dia, this->hoje.mes, this->hoje.ano);
         if (linhas[i] == "carregarAsg()")
             carregarAsg();
-        if (linhas[i] == "carregarVendedore()")
+        if (linhas[i] == "carregarVendedor()")
             carregarVendedor();
         if (linhas[i] == "carregarGerente()")
             carregarGerente();
         if (linhas[i] == "carregaDono()")
             carregarDono();
+        if (linhas[i] == "imprimeAsgs()")
+            imprimeAsgs();
+        if (linhas[i] == "imprimeVendedores()")
+            imprimeVendendores();
+        if (linhas[i] == "imprimeGerentes()")
+            imprimeGerentes();
+        if (linhas[i] == "imprimeDono()")
+            imprimeDono();
         if (linhas[i] == "buscaFuncionario()")
         {
-
             string matricula = escolherFuncionario();
             buscaFuncionario(stoi(matricula));
             i++;
@@ -156,6 +163,11 @@ void Empresa::carregarAsg()
     while (getline(arq, linha))
     {
         cout << "Contador: " << contador << "Linha: " << linha << endl;
+
+        if (contador != 21 && contador != 17 && contador != 13 && contador != 7 && contador > 2)
+            palavras.push_back(linha);
+
+        contador++;
         if (contador == 25)
         {
             contador = 0;
@@ -166,13 +178,10 @@ void Empresa::carregarAsg()
                     stoi(palavras[15]));
             cout << "Criou asg" << endl;
             this->asgs.push_back(asg);
-            posicao++;
+            palavras.clear();
         }
-
-        if (contador != 21 && contador != 17 && contador != 13 && contador != 7 && contador > 2)
-            palavras.push_back(linha);
-        contador++;
     }
+    cout << asgs.size() << endl;
     cout << "Saiu de Asg" << endl;
 };
 void Empresa::carregarVendedor()
@@ -180,11 +189,14 @@ void Empresa::carregarVendedor()
     fstream arq;
     arq.open("./Arquivos/vendedor.txt", ios::in);
     string linha;
-    int contador = 0, posicao = 0;
+    int contador = 0;
     vector<string> palavras;
     char tipoVendedor;
     while (getline(arq, linha))
     {
+        if (contador != 21 && contador != 17 && contador != 13 && contador != 7 && contador > 2)
+            palavras.push_back(linha);
+        contador++;
         if (contador == 25)
         {
             contador = 0;
@@ -195,39 +207,43 @@ void Empresa::carregarVendedor()
                               stoi(palavras[8]), stoi(palavras[2]), palavras[13],
                               palavras[12], stoi(palavras[17]), stoi(palavras[16]),
                               stoi(palavras[15]), tipoVendedor);
-            this->vendedores[posicao] = vendedor;
-
-            posicao++;
+            this->vendedores.push_back(vendedor);
+            palavras.clear();
         }
-        if (contador != 21 && contador != 17 && contador != 13 && contador != 7 && contador > 2)
-            palavras.push_back(linha);
-        contador++;
     }
 };
 void Empresa::carregarGerente()
 {
+    cout << "Entrou em carregar Gerente" << endl;
     fstream arq;
     arq.open("./Arquivos/gerente.txt", ios::in);
     string linha;
-    int contador = 0, posicao = 0;
+    int contador = 0;
     vector<string> palavras;
     while (getline(arq, linha))
     {
-
-        if (contador == 25)
-        {
-            contador = 0;
-            Gerente gerente(palavras[0], palavras[1], palavras[4], stoi(palavras[12]),
-                            stoi(palavras[11]), stoi(palavras[10]), palavras[5],
-                            palavras[7], palavras[8], palavras[6], stoi(palavras[9]),
-                            stoi(palavras[3]), palavras[14], palavras[13], stoi(palavras[18]),
-                            stoi(palavras[17]), stoi(palavras[16]), stof(palavras[15]));
-            this->gerentes.push_back(gerente);
-            posicao++;
-        }
+        cout << "Contador: " << contador << " linha: "<< linha << endl;
         if (contador != 21 && contador != 17 && contador != 13 && contador != 7 && contador > 2)
             palavras.push_back(linha);
+       
         contador++;
+       
+        if (contador == 25)
+        {
+            cout << "Entrou no if" << endl;
+            contador = 0;
+            Gerente gerente;
+            gerente.setNome(palavras[0]);
+            gerente.setCpf(palavras[1]);
+            gerente.setQuantFilhos(stoi(palavras[2]));
+            gerente.setEstadoCivil(palavras[3]);
+            gerente.setEnderecoPessoal(palavras[4], palavras[6], palavras[7], palavras[5], stoi(palavras[8]));
+            cout << "Gerente criado " << endl;
+            this->gerentes.push_back(gerente);
+
+            palavras.clear();
+            cout << "Criou gerente" << endl;
+        }
     }
 };
 void Empresa::carregarDono()
@@ -241,30 +257,28 @@ void Empresa::carregarDono()
     vector<string> palavras;
     while (getline(arq, linha))
     {
-        cout << linha << endl;
+
         if (contador == 14)
         {
             contador = 0;
         }
-        if (contador >= 3)
+        if (contador >= 2)
         {
             palavras.push_back(linha);
+            cout << linha << endl;
         }
         contador++;
     }
-    try
-    {
-        Pessoa donoF(palavras[0], palavras[1], stoi(palavras[11]), stoi(palavras[10]), stoi(palavras[9]), palavras[3], palavras[4], palavras[6], palavras[7], palavras[5], stoi(palavras[8]), stoi(palavras[2]));
-        this->dono = donoF;
-    }
-    catch (const std::exception &e)
-    {
-        cout << "Em carregar dono: ";
-        std::cerr << e.what() << '\n';
-    }
+    this->dono.setNome(palavras[0]);
+    this->dono.setCpf(palavras[1]);
+    this->dono.setEstadoCivil(palavras[3]);
+    this->dono.setEnderecoPessoal(palavras[4], palavras[6], palavras[7], palavras[5], stoi(palavras[8]));
+    this->dono.setDataNascimento(stoi(palavras[11]), stoi(palavras[10]), stoi(palavras[9]));
+    this->dono.setQuantFilhos(stoi(palavras[2]));
 };
 void Empresa::imprimeAsgs()
 {
+    cout << "Entrou em imprimir ASG" << endl;
     for (int i = 0; i < this->asgs.size(); i++)
     {
         cout << "######################################" << endl;

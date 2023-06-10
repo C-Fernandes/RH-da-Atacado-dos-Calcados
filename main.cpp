@@ -6,9 +6,17 @@ using namespace std;
 int main(int argc, char const *argv[])
 {
     Data dataHoje;
-    dataHoje.dia = stoi(argv[0]);
-    dataHoje.mes = stoi(argv[1]);
-    dataHoje.ano = stoi(argv[2]);
+    try
+    {
+        dataHoje.dia = stoi(argv[1]);
+        dataHoje.mes = stoi(argv[2]);
+        dataHoje.ano = stoi(argv[3]);
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "Não foi possivel útilizar a data passada, tente novamente." << '\n';
+    }
+cout << "Passou aqui" << endl;
     Empresa *atacadoDosCalcado = new Empresa("Atacado dos Calçados", "40.101.588/0001-98", 156289.56, dataHoje);
     atacadoDosCalcado->carregarFuncoes();
     return 0;

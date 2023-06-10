@@ -1,0 +1,3 @@
+g++ -c ASG/asg.cpp Empresa/empresa.cpp Funcionario/funcionario.cpp Gerente/gerente.cpp Pessoa/pessoa.cpp Vendedor/vendedor.cpp main.cpp
+
+g++ -o exe asg.o empresa.o funcionario.o gerente.o pessoa.o vendedor.o main.o

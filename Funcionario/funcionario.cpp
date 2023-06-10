@@ -1,5 +1,5 @@
 #include "funcionario.hpp"
-
+using namespace std;
 std::string Funcionario::getSalario() { return this->salario; };
 void Funcionario::setSalario(std::string salario){this->salario = salario;};
 std::string Funcionario::getMatricula() { return this->matricula; };

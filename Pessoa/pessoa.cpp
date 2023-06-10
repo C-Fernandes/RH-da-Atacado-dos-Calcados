@@ -1,5 +1,6 @@
 #include "pessoa.hpp"
-
+using namespace std;
+Pessoa::Pessoa(){};
 Pessoa::Pessoa(std::string nome, std::string cpf, int dia, int mes, int ano, std::string estadoCivil, std::string cidade, std::string bairro, std::string rua, std::string cep, int numero, int quantFilhos)
 {
     this->nome = nome;

@@ -23,6 +23,7 @@ public:
     float getFaturamentoMensal();
     void setFaturamentoMensal(float faturamento);
     std::string getNomeEmpresa();
+    std::string escolherFuncionario();
     void setNomeEmpresa(std::string nomeEmpresa);
     std::string getCnpj();
     void setCnpj(std::string cnpj);

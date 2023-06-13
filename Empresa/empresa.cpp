@@ -47,60 +47,60 @@ int sorteioN(int minimo, int maximo)
     srand(seed);
     int numero = (minimo + (rand() % maximo));
 
-    cout << "numero sorteado função: " << numero << endl;
+    // cout << "numero sorteado função: " << numero << endl;
     return numero;
 }
 string Empresa::escolherFuncionario()
 {
-    int numero = sorteioN(0, 4);
-    cout << "primeiro numero sorteado:" << numero << endl;
+    int numero = sorteioN(0, 5);
+    // cout << "primeiro numero sorteado:" << numero << endl;
     string matricula = "289384289";
-    if (numero == 0)
-    {
-        cout << "ASGS, tamanho: " << asgs.size() << endl;
-
-        numero = sorteioN(0, asgs.size());
-        cout << "Entrou no if 0 matricula " << matricula << "numero  " << numero << endl;
-        matricula = asgs[numero].getMatricula();
-        cout << "Entrou no if 0 matricula " << matricula << "numero  " << numero << endl;
-    }
     if (numero == 1)
     {
-        cout << "Vendedores, tamanho: " << vendedores.size() << endl;
+        return matricula; //     cout << "ASGS, tamanho: " << asgs.size() << endl;
 
-        numero = sorteioN(0, vendedores.size());
-        cout << "Entrou no if 1 matricula " << matricula << "numero  " << numero << endl;
-        matricula = vendedores[numero].getMatricula();
-        cout << "Entrou no if 1 matricula " << matricula << "numero  " << numero << endl;
+        numero = sorteioN(0, asgs.size());
+        //   cout << "Entrou no if 0 matricula " << matricula << "numero  " << numero << endl;
+        matricula = asgs[numero].getMatricula();
+        return matricula; /// cout << "Entrou no if 0 matricula " << matricula << "numero  " << numero << endl;
     }
     if (numero == 2)
     {
-        cout << "Gerentes, tamanho: " << gerentes.size() << endl;
+        //  cout << "Vendedores, tamanho: " << vendedores.size() << endl;
+
+        numero = sorteioN(0, vendedores.size());
+        // cout << "Entrou no if 1 matricula " << matricula << "numero  " << numero << endl;
+        matricula = vendedores[numero].getMatricula();
+        return matricula; // cout << "Entrou no if 1 matricula " << matricula << "numero  " << numero << endl;
+    }
+    if (numero == 3)
+    {
+        //    cout << "Gerentes, tamanho: " << gerentes.size() << endl;
 
         numero = sorteioN(0, gerentes.size());
-        cout << "Entrou no if 2 matricula " << matricula << "numero  " << numero << endl;
+        //  cout << "Entrou no if 2 matricula " << matricula << "numero  " << numero << endl;
         matricula = gerentes[numero].getMatricula();
-
-        cout << "Entrou no if 2 matricula " << matricula << "numero  " << numero << endl;
+        return matricula;
+        // cout << "Entrou no if 2 matricula " << matricula << "numero  " << numero << endl;
     }
-    cout << "Matricula " << matricula << endl;
-    return matricula;
+    else
+    {
+        return matricula;
+    }
+    // cout << "Matricula " << matricula << endl;
 }
 void Empresa::carregarFuncoes()
 {
-    cout << "Entrou em carregar funções" << endl;
     fstream arq;
     arq.open("./Arquivos/funcoes.txt", ios::in);
     string linha;
     vector<string> linhas;
     while (getline(arq, linha))
     {
-        cout << linha << endl;
         linhas.push_back(linha);
     }
     for (int i = 0; i < linhas.size(); i++)
     {
-        cout << linhas[i] << endl;
         if (linhas[i] == "carregarEmpresa()")
             carregarEmpresa(this->hoje.dia, this->hoje.mes, this->hoje.ano);
         if (linhas[i] == "carregarAsg()")
@@ -138,9 +138,10 @@ void Empresa::carregarFuncoes()
         if (linhas[i] == "calcularRecisao()")
         {
             string matricula = escolherFuncionario();
+            matricula = simplificadorMatricula(matricula);
             Data data;
             data.dia = sorteioN(1, 31);
-            data.mes = sorteioN(1, 13);
+            data.mes = sorteioN(1, 12);
             data.ano = 2023;
             calcularRecisao(stoi(matricula), data);
             break;
@@ -150,7 +151,6 @@ void Empresa::carregarFuncoes()
 };
 void Empresa::carregarEmpresa(int dia, int mes, int ano)
 {
-    cout << "Carregou empresa" << endl;
     fstream arq;
     arq.open("./Arquivos/empresa.txt", ios::in);
     string linha;
@@ -171,8 +171,6 @@ void Empresa::carregarEmpresa(int dia, int mes, int ano)
 };
 void Empresa::carregarAsg()
 {
-    cout << "Entrou em carregar ASG\n"
-         << endl;
     fstream arq;
     arq.open("./Arquivos/asg.txt", ios::in);
     string linha;
@@ -192,17 +190,14 @@ void Empresa::carregarAsg()
                     palavras[5], stoi(palavras[8]), stoi(palavras[2]), stoi(palavras[14]),
                     palavras[13], palavras[12], stoi(palavras[17]), stoi(palavras[16]),
                     stoi(palavras[15]));
-            cout << "Criou asg" << endl;
             this->asgs.push_back(asg);
             palavras.clear();
         }
     }
     cout << asgs.size() << endl;
-    cout << "Saiu de Asg" << endl;
 };
 void Empresa::carregarVendedor()
 {
-    cout << "Entrou em carregar vendedor" << endl;
     fstream arq;
     arq.open("./Arquivos/vendedor.txt", ios::in);
     string linha;
@@ -226,13 +221,11 @@ void Empresa::carregarVendedor()
                               stoi(palavras[15]), tipoVendedor);
             this->vendedores.push_back(vendedor);
             palavras.clear();
-            cout << "Criou vendedor " << endl;
         }
     }
 };
 void Empresa::carregarGerente()
 {
-    cout << "Entrou em carregar Gerente" << endl;
     fstream arq;
     arq.open("./Arquivos/gerente.txt", ios::in);
     string linha;
@@ -247,7 +240,6 @@ void Empresa::carregarGerente()
 
         if (contador == 25)
         {
-            cout << "Entrou no if" << endl;
             contador = 0;
             Gerente gerente;
             gerente.setNome(palavras[0]);
@@ -263,15 +255,11 @@ void Empresa::carregarGerente()
             this->gerentes.push_back(gerente);
 
             palavras.clear();
-            cout << "Criou gerente" << endl;
         }
     }
-    cout << "Saiu de carregar gerente " << endl;
 };
 void Empresa::carregarDono()
 {
-    cout << "Entrou em carregar dono" << endl;
-
     fstream arq;
     arq.open("./Arquivos/dono.txt", ios::in);
     string linha;
@@ -287,7 +275,6 @@ void Empresa::carregarDono()
         if (contador >= 2)
         {
             palavras.push_back(linha);
-            cout << linha << endl;
         }
         contador++;
     }
@@ -297,12 +284,10 @@ void Empresa::carregarDono()
     this->dono.setEnderecoPessoal(palavras[4], palavras[6], palavras[7], palavras[5], stoi(palavras[8]));
     this->dono.setDataNascimento(stoi(palavras[11]), stoi(palavras[10]), stoi(palavras[9]));
     this->dono.setQuantFilhos(stoi(palavras[2]));
-
-    cout << "Saiu de carregar dono" << endl;
 };
 void Empresa::imprimeAsgs()
 {
-    cout << "\nEntrou em imprimir ASG" << endl;
+    cout << "#########IMPRIMINDO ASGS##########" << endl;
     for (int i = 0; i < this->asgs.size(); i++)
     {
         cout << "######################################" << endl;
@@ -323,7 +308,7 @@ void Empresa::imprimeAsgs()
 void Empresa::imprimeVendendores()
 {
 
-    cout << "\nEntrou em imprimir vendedores" << endl;
+    cout << "#########IMPRIMINDO VENDEDORES##########" << endl;
     for (int i = 0; i < this->vendedores.size(); i++)
     {
         cout << "######################################" << endl;
@@ -343,10 +328,10 @@ void Empresa::imprimeVendendores()
 };
 void Empresa::imprimeGerentes()
 {
-
-    cout << "\nEntrou em imprimir gerentes" << endl;
+    cout << "#########IMPRIMINDO GERENTES##########" << endl;
     for (int i = 0; i < this->gerentes.size(); i++)
     {
+
         cout << "######################################" << endl;
         cout << "############# GERENTE Nº" << i + 1 << " #############" << endl;
         cout << "Nome: " << this->gerentes[i].getNome() << endl;
@@ -376,46 +361,52 @@ void Empresa::imprimeDono()
 };
 void Empresa::buscaFuncionario(int matricula)
 {
+    cout << "\nBuscar Funcionario\nMatricula:" << matricula << endl;
     Pessoa funcionario;
     bool encontrado = false;
     string matriculaString = to_string(matricula);
     for (int i = 0; i < gerentes.size(); i++)
     {
         string matriculaUser = simplificadorMatricula(this->gerentes[i].getMatricula());
-
         if (matriculaUser == matriculaString)
         {
-            cout << "Funcionario encontrado!\nTipo de Funcionario: Gerente\n"
+            cout << "Tipo de Funcionario: Gerente\n"
                  << endl;
             funcionario = this->gerentes[i];
             encontrado = true;
+            break;
         }
     }
-    for (int j = 0; j < vendedores.size(); j++)
+    if (!encontrado)
     {
-        string matriculaUser = simplificadorMatricula(this->vendedores[j].getMatricula());
-
-        if (matriculaUser == matriculaString)
+        for (int j = 0; j < vendedores.size(); j++)
         {
-            cout << "Funcionario encontrado!\nTipo de Funcionario: Vendedor\n"
-                 << endl;
-            funcionario = this->vendedores[j];
-            encontrado = true;
+            string matriculaUserV = simplificadorMatricula(this->vendedores[j].getMatricula());
+            if (matriculaUserV == matriculaString)
+            {
+                cout << "Tipo de Funcionario: Vendedor\n"
+                     << endl;
+                funcionario = this->vendedores[j];
+                encontrado = true;
+            }
         }
     }
-    for (int q = 0; q < asgs.size(); q++)
+    if (!encontrado)
     {
-        string matriculaUser = simplificadorMatricula(this->asgs[q].getMatricula());
-
-        if (matriculaUser == matriculaString)
+        for (int q = 0; q < asgs.size(); q++)
         {
-            cout << "Funcionario encontrado!\nTipo de Funcionario: Asg\n"
-                 << endl;
-            funcionario = this->asgs[q];
-            encontrado = true;
+            string matriculaUserA = simplificadorMatricula(this->asgs[q].getMatricula());
+            if (matriculaUserA == matriculaString)
+            {
+
+                cout << "Tipo de Funcionario: Asg\n"
+                     << endl;
+                funcionario = this->asgs[q];
+                encontrado = true;
+            }
         }
     }
-    if (encontrado == false)
+    if (!encontrado)
         cout << "Funcionario não encontrado no sistema!" << endl;
     else
     {
@@ -432,7 +423,7 @@ void Empresa::cacularSalarioFuncionario(int matricula)
 {
     cout << "\nCalcular Salario Funcionario\n"
          << endl;
-    // cout << "Matricula passada: " << matricula << endl;
+    cout << "Matricula passada: " << matricula << endl;
     string matriculaString = to_string(matricula);
     int posicao = 0, encontrado = 0;
     // cout << "Matricula string" << matriculaString << endl;
@@ -502,25 +493,34 @@ void Empresa::cacularSalarioFuncionario(int matricula)
     {
         Gerente gerente = gerentes[posicao];
         salario = gerente.calcularSalario(0);
-        cout << "Salário: " << salario << endl;
+        cout << "Nome: " << gerente.getNome();
+        cout << " - Matricula: " << gerente.getMatricula();
+        cout << " - CPF: " << gerente.getCpf();
+        cout << " - Salário: " << salario << endl;
     }
     if (encontrado == 2)
     {
         Vendedor vendedor = vendedores[posicao];
         salario = vendedor.calcularSalario(0);
-        cout << "Salário: " << salario << endl;
+        cout << "Nome: " << vendedor.getNome();
+        cout << " - Matricula: " << vendedor.getMatricula();
+        cout << " - Cpf: " << vendedor.getCpf();
+        cout << " - Salário: " << salario << endl;
     }
     if (encontrado == 3)
     {
         Asg asg = asgs[posicao];
         salario = asg.calcularSalario(0);
-        cout << "Salário: " << salario << endl;
+        cout << "Nome: " << asg.getNome();
+        cout << " - Matricula: " << asg.getMatricula();
+        cout << " - Cpf: " << asg.getCpf();
+        cout << " - Salário: " << salario << endl;
     }
 };
 void Empresa::calcularTodoOsSalarios()
 {
-    cout << "Entrou em calcular todos os salarios" << endl;
     fstream arq;
+    cout << "\n";
     arq.open("./Arquivos/relatatorio.txt", ios::out);
     arq << "######### Relatório Financeiro ########\n"
         << endl;
@@ -570,13 +570,16 @@ void Empresa::calcularTodoOsSalarios()
 };
 void Empresa::calcularRecisao(int matricula, Data desligamento)
 {
-    bool encontrado = 0;
+    cout << "\nCalcular Recisão\nMatricula:" << matricula << endl;
+    int encontrado = 0;
     int posicao = 0;
     for (int i = 0; i < gerentes.size(); i++)
     {
-        if (stoi(this->gerentes[i].getMatricula()) == matricula)
+        string matriculaN = simplificadorMatricula(this->gerentes[i].getMatricula());
+
+        if (stoi(matriculaN) == matricula)
         {
-            cout << "Funcionario encontrado!\nTipo de Funcionario: Gerente\n"
+            cout << "\nTipo de Funcionario: Gerente\n"
                  << endl;
             posicao = i;
             encontrado = 1;
@@ -586,12 +589,15 @@ void Empresa::calcularRecisao(int matricula, Data desligamento)
     {
         for (int j = 0; j < vendedores.size(); j++)
         {
-            if (stoi(this->vendedores[j].getMatricula()) == matricula)
+            string matriculaN = simplificadorMatricula(this->vendedores[j].getMatricula());
+
+            if (stoi(matriculaN) == matricula)
             {
-                cout << "Funcionario encontrado!\nTipo de Funcionario: Vendedor\n"
+                cout << "\nTipo de Funcionario: Vendedor\n"
                      << endl;
                 posicao = j;
                 encontrado = 2;
+                break;
             }
         }
     }
@@ -599,34 +605,42 @@ void Empresa::calcularRecisao(int matricula, Data desligamento)
     {
         for (int q = 0; q < asgs.size(); q++)
         {
-            if (stoi(this->asgs[q].getMatricula()) == matricula)
+            string matriculaN = simplificadorMatricula(this->asgs[q].getMatricula());
+
+            if (stoi(matriculaN) == matricula)
             {
-                cout << "Funcionario encontrado!\nTipo de Funcionario: Asg\n"
+                cout << "\nTipo de Funcionario: Asg\n"
                      << endl;
                 posicao = q;
                 encontrado = 3;
+                break;
             }
         }
     }
+
     float salario;
     if (encontrado == 0)
         cout << "Funcionario não encontrado no sistema!" << endl;
     if (encontrado == 1)
     {
-        Gerente gerente = gerentes[posicao];
-        salario = gerente.calcularRecisao(desligamento);
-        cout << "Recisão: " << salario << endl;
+        salario = gerentes[posicao].calcularRecisao(desligamento);
+        cout << "Nome: " << gerentes[posicao].getNome() << "\nMatricula: " << gerentes[posicao].getMatricula();
+        cout << "\nCpf: " << gerentes[posicao].getCpf() << "\nData Ingresso: " << gerentes[posicao].getIngressoEmpresa().dia << "/" << gerentes[posicao].getIngressoEmpresa().mes << "/" << gerentes[posicao].getIngressoEmpresa().ano;
+        cout << "\nData saida:" << desligamento.dia << "/" << desligamento.mes << "/" << desligamento.ano << "\nRecisão: " << salario << endl;
     }
     if (encontrado == 2)
     {
-        Vendedor vendedor = vendedores[posicao];
-        salario = vendedor.calcularRecisao(desligamento);
-        cout << "Recisão: " << salario << endl;
+        salario = vendedores[posicao].calcularRecisao(desligamento);
+        cout << "Nome: " << vendedores[posicao].getNome() << "\nMatricula: " << vendedores[posicao].getMatricula();
+        cout << "\nCpf: " << vendedores[posicao].getCpf() << "\nData Ingresso: " << vendedores[posicao].getIngressoEmpresa().dia << "/" << vendedores[posicao].getIngressoEmpresa().mes << "/" << vendedores[posicao].getIngressoEmpresa().ano;
+        cout << "\nData saida:" << desligamento.dia << "/" << desligamento.mes << "/" << desligamento.ano << "\nRecisão: " << salario << endl;
     }
     if (encontrado == 3)
     {
-        Asg asg = asgs[posicao];
-        salario = asg.calcularRecisao(desligamento);
-        cout << "Recisão: " << salario << endl;
+
+        salario = asgs[posicao].calcularRecisao(desligamento);
+        cout << "Nome: " << asgs[posicao].getNome() << "\nMatricula: " << asgs[posicao].getMatricula();
+        cout << "\nCpf: " << asgs[posicao].getCpf() << "\nData Ingresso: " << asgs[posicao].getIngressoEmpresa().dia << "/" << asgs[posicao].getIngressoEmpresa().mes << "/" << asgs[posicao].getIngressoEmpresa().ano;
+        cout << "\nData saida:" << desligamento.dia << "/" << desligamento.mes << "/" << desligamento.ano << "\nRecisão: " << salario << endl;
     }
 };

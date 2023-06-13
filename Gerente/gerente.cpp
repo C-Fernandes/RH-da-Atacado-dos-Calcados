@@ -21,31 +21,28 @@ float Gerente::getParticipacaoLucros() { return this->participacaoLucros; };
 void Gerente::setParticipacaoLucros(float participacaoLucros) { this->participacaoLucros = participacaoLucros; };
 float Gerente::calcularSalario(int diasFaltas)
 {
-    double salario = stod(getSalario()) - (stod(getSalario()) / 30) * diasFaltas;
-    salario += stod(getSalario()) * this->participacaoLucros;
+    float salario = stof(getSalario()) - ((stof(getSalario()) / 30) * diasFaltas);
+    salario += this->participacaoLucros;
     salario += getQuantFilhos() * 100;
     return salario;
 };
-float Gerente::calcularRecisao(Data desligamento){
-      int ganhoRDia = stod(getSalario())/365;
-    int quantAnos = getIngressoEmpresa().ano - desligamento.ano;
+float Gerente::calcularRecisao(Data desligamento)
+{
+    
+    float ganhoRDia = stof(getSalario()) / 365;
+    float ganhoPMes = stof(getSalario()) / 12;
+    int quantAnos = fabs(getIngressoEmpresa().ano - desligamento.ano);
     int quantMes = getIngressoEmpresa().mes - desligamento.mes;
-    int quantDias = getIngressoEmpresa().dia - desligamento.dia;
+    int quantDias = fabs(getIngressoEmpresa().dia - desligamento.dia);
     if (quantMes == 0)
-    {
         quantMes = 12;
-    }
     if (quantMes > 0)
-    {
         quantMes = 12 - quantMes;
-    }
     if (quantMes < 0)
-    {
         quantMes = 12 + fabs(quantMes);
-    }
     if (quantAnos > 1)
-        quantMes += 12 * quantAnos;
+        quantMes += 12 * (quantAnos - 1);
 
-    quantDias += quantMes * 30;
-    return ganhoRDia * quantDias;
+    float valor = (ganhoRDia * quantDias) + (ganhoPMes * quantMes);
+    return valor;
 };

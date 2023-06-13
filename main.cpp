@@ -18,6 +18,16 @@ int main(int argc, char const *argv[])
     }
 cout << "Passou aqui" << endl;
     Empresa *atacadoDosCalcado = new Empresa("Atacado dos Calçados", "40.101.588/0001-98", 156289.56, dataHoje);
-    atacadoDosCalcado->carregarFuncoes();
+    try
+    {
+       atacadoDosCalcado->carregarFuncoes();
+    }
+    catch(int error)
+    {
+        if(error == 0){cout << "Error ao abrir o arquivo funções." << endl;}
+       else{ std::cerr << error << '\n';}
+    }
+    
+    
     return 0;
 }

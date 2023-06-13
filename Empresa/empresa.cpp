@@ -93,6 +93,8 @@ void Empresa::carregarFuncoes()
 {
     fstream arq;
     arq.open("./Arquivos/funcoes.txt", ios::in);
+    if (!arq.is_open())
+        throw 0;
     string linha;
     vector<string> linhas;
     while (getline(arq, linha))
@@ -102,17 +104,90 @@ void Empresa::carregarFuncoes()
     for (int i = 0; i < linhas.size(); i++)
     {
         if (linhas[i] == "carregarEmpresa()")
-            carregarEmpresa(this->hoje.dia, this->hoje.mes, this->hoje.ano);
+        {
+            try
+            {
+                carregarEmpresa(this->hoje.dia, this->hoje.mes, this->hoje.ano);
+            }
+            catch (int error)
+            {
+                if (error == 0)
+                    cout << "Error ao abrir o arquivo da empresa" << endl;
+                else
+                    cout << error << endl;
+            }
+        }
+
         if (linhas[i] == "carregarAsg()")
-            carregarAsg();
+        {
+            try
+            {
+                carregarAsg();
+            }
+            catch (int error)
+            {
+                if (error == 0)
+                    cout << "Error ao abrir o arquivo dos vendedores" << endl;
+                else
+                    cout << error << endl;
+            }
+        }
         if (linhas[i] == "carregarVendedor()")
-            carregarVendedor();
+        {
+            try
+            {
+                carregarVendedor();
+            }
+            catch (int error)
+            {
+                if (error == 0)
+                    cout << "Error ao abrir o arquivo dos vendedores" << endl;
+                else
+                    cout << error << endl;
+            }
+        }
         if (linhas[i] == "carregarGerente()")
-            carregarGerente();
+        {
+            try
+            {
+                carregarGerente();
+            }
+            catch (int error)
+            {
+                if (error == 0)
+                    cout << "Error ao abrir o arquivo do gerentes" << endl;
+                else
+                    cout << error << endl;
+            }
+        };
         if (linhas[i] == "carregaDono()")
-            carregarDono();
+        {
+            try
+            {
+                carregarDono();
+            }
+            catch (int error)
+            {
+                if (error == 0)
+                    cout << "Error ao abrir o arquivo do dono" << endl;
+                else
+                    cout << error << endl;
+            }
+        };
         if (linhas[i] == "imprimeAsgs()")
-            imprimeAsgs();
+        {
+            try
+            {
+                imprimeAsgs();
+            }
+            catch (int error)
+            {
+                if (error == 0)
+                    cout << "Error ao abrir o arquivo dos asgs" << endl;
+                else
+                    cout << error << endl;
+            }
+        };
         if (linhas[i] == "imprimeVendedores()")
             imprimeVendendores();
         if (linhas[i] == "imprimeGerentes()")
@@ -134,7 +209,20 @@ void Empresa::carregarFuncoes()
             i++;
         }
         if (linhas[i] == "calculaTodoOsSalarios()")
-            calcularTodoOsSalarios();
+        {
+            try
+            {
+                calcularTodoOsSalarios();
+            }
+            catch (int error)
+            {
+                if (error == 0)
+                    cout << "Error ao abrir o arquivo do relátorio para escrita" << endl; if (error == 1)
+                    cout << "Error ao abrir o arquivo do relátorio para leitura" << endl;
+                else
+                    cout << error << endl;
+            }
+        };
         if (linhas[i] == "calcularRecisao()")
         {
             string matricula = escolherFuncionario();
@@ -153,6 +241,8 @@ void Empresa::carregarEmpresa(int dia, int mes, int ano)
 {
     fstream arq;
     arq.open("./Arquivos/empresa.txt", ios::in);
+    if (!arq.is_open())
+        throw 0;
     string linha;
     int contador;
     while (getline(arq, linha))
@@ -173,6 +263,8 @@ void Empresa::carregarAsg()
 {
     fstream arq;
     arq.open("./Arquivos/asg.txt", ios::in);
+    if (!arq.is_open())
+        throw 0;
     string linha;
     int contador = 0, posicao = 0;
     vector<string> palavras;
@@ -200,6 +292,8 @@ void Empresa::carregarVendedor()
 {
     fstream arq;
     arq.open("./Arquivos/vendedor.txt", ios::in);
+    if (!arq.is_open())
+        throw 0;
     string linha;
     int contador = 0;
     vector<string> palavras;
@@ -228,6 +322,8 @@ void Empresa::carregarGerente()
 {
     fstream arq;
     arq.open("./Arquivos/gerente.txt", ios::in);
+    if (!arq.is_open())
+        throw 0;
     string linha;
     int contador = 0;
     vector<string> palavras;
@@ -262,6 +358,8 @@ void Empresa::carregarDono()
 {
     fstream arq;
     arq.open("./Arquivos/dono.txt", ios::in);
+    if (!arq.is_open())
+        throw 0;
     string linha;
     int contador = 0;
     vector<string> palavras;
@@ -429,58 +527,32 @@ void Empresa::cacularSalarioFuncionario(int matricula)
     // cout << "Matricula string" << matriculaString << endl;
 
     for (int i = 0; i < gerentes.size(); i++)
-    {
-
-        // cout << "Entrou no for de gerentes " << endl;
-        string matriculaUser = simplificadorMatricula(this->gerentes[i].getMatricula());
-        //   cout << "Matricula:" << matriculaUser << "=" << matriculaString << endl;
-
-        if (matriculaUser == matriculaString)
+    { string matriculaUser = simplificadorMatricula(this->gerentes[i].getMatricula());
+         if (matriculaUser == matriculaString)
         {
-
-            //   cout << "Funcionario encontrado!\nTipo de Funcionario: Gerente\n"
-            //    << endl;
             posicao = i;
             encontrado = 1;
             break;
         }
     }
-    // cout << "encontrado: " << encontrado << endl;
     if (encontrado == 0)
-    {
-        // cout << "Entrou no for de vendedores" << endl;
+    { 
         for (int j = 0; j < vendedores.size(); j++)
         {
             string matriculaUser = simplificadorMatricula(this->vendedores[j].getMatricula());
-            // cout << matriculaUser << endl;
-            // cout << "Matricula: " << matriculaUser << " = " << matriculaString << endl;
-
-            if (matriculaUser == matriculaString)
-            {
-                //  cout << "Funcionario encontrado!\nTipo de Funcionario: Vendedor\n"
-                // << endl;
-                posicao = j;
+             if (matriculaUser == matriculaString)
+            {  posicao = j;
                 encontrado = 2;
                 break;
             }
         }
-    }
-    // cout << "encontrado: " << encontrado << endl;
-    if (encontrado == 0)
-    {
-        // cout << "Entrou no for de asg" << endl;
-
-        for (int q = 0; q < asgs.size(); q++)
+    } if (encontrado == 0)
+    { for (int q = 0; q < asgs.size(); q++)
         {
             string matriculaUser = simplificadorMatricula(this->asgs[q].getMatricula());
-            // cout << matriculaUser << endl;
-            // cout << "Matricula: " << matriculaUser << " = " << matriculaString << endl;
-
-            if (matriculaUser == matriculaString)
+             if (matriculaUser == matriculaString)
             {
-                // cout << "Funcionario encontrado!\nTipo de Funcionario: Asg\n"
-                //  << endl;
-                posicao = q;
+                 posicao = q;
                 encontrado = 3;
                 break;
             }
@@ -522,6 +594,8 @@ void Empresa::calcularTodoOsSalarios()
     fstream arq;
     cout << "\n";
     arq.open("./Arquivos/relatatorio.txt", ios::out);
+    if (!arq.is_open())
+        throw 0;
     arq << "######### Relatório Financeiro ########\n"
         << endl;
 
@@ -563,7 +637,9 @@ void Empresa::calcularTodoOsSalarios()
 
     arq << "CUSTO TOTAL DE RH: R$ " << totalGeral << endl;
     arq.close();
-    arq.open("./Arquivos/relatatorio.txt", ios::in);
+    arq.open("../Arquivos/relatatorio.txt", ios::in);
+    if (!arq.is_open())
+        throw 1;
     string linha;
     while (getline(arq, linha))
         cout << linha << endl;

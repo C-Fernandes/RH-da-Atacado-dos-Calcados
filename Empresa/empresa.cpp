@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include<cstdlib>
 #include <time.h>
 #include <vector>
 #include "empresa.hpp"
@@ -30,7 +31,7 @@ vector<Gerente> Empresa::getGerentes() { return this->gerentes; };
 string simplificadorMatricula(string matricula) // Função para tirar ponto e - da matricula
 {
     string novaMatricula = "";
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < matricula.length(); i++)
     {
         if (matricula[i] != '.' && matricula[i] != '-' && matricula[i] != '\n')
         {
@@ -41,34 +42,33 @@ string simplificadorMatricula(string matricula) // Função para tirar ponto e -
 }
 int sorteioN(int minimo, int maximo) // Função para sortear um número aleátorio.
 {
-    unsigned seed = time(0); // Muda a seed constantemente
-    srand(seed);
-    return (minimo + (rand() % maximo)); // Pega um valor aleatorio e divide pelo maximo, para obter o resto, somando ao minimo e o retorna.
+    // Muda a seed constantemente
+    srand(time(NULL));
+    int numero = (minimo + (rand() % maximo));
+    return numero; 
+    // Pega um valor aleatorio e divide pelo maximo, para obter o resto, somando ao minimo e o retorna.
 }
 string Empresa::escolherFuncionario() // Função escolher matricula de forma aleatoria
 {
-    int numero = sorteioN(0, 5);    // Sorteia um numero de 0 a 4
-    string matricula = "289384289"; // Caso o número escolhido não seja de 1 a 3
+    int numero = sorteioN(0, 5), numeroT; // Sorteia um numero de 0 a 4
+    string matricula = "289384289";       // Caso o número escolhido não seja de 1 a 3
     if (numero == 1)
     {
-        numero = sorteioN(0, asgs.size());       // Sorteia de 0 ao numero máximo (tamanho do vector)
-        matricula = asgs[numero].getMatricula(); // Pega a matricula e o retorna;
-        return matricula;
+        numeroT = sorteioN(0, asgs.size());       // Sorteia de 0 ao numero máximo (tamanho do vector)
+        matricula = asgs[numeroT].getMatricula(); // Pega a matricula e o retorna;
     }
     if (numero == 2)
     {
-        numero = sorteioN(0, vendedores.size());
-        matricula = vendedores[numero].getMatricula();
-        return matricula;
+        numeroT = sorteioN(0, vendedores.size());
+        matricula = vendedores[numeroT].getMatricula();
     }
     if (numero == 3)
     {
-        numero = sorteioN(0, gerentes.size());
-        matricula = gerentes[numero].getMatricula();
-        return matricula;
+        numeroT = sorteioN(0, gerentes.size());
+        matricula = gerentes[numeroT].getMatricula();
     }
-    else
         return matricula;
+    
 }
 void Empresa::carregarFuncoes() // Função para carregar funcoes
 {
@@ -77,6 +77,7 @@ void Empresa::carregarFuncoes() // Função para carregar funcoes
     if (!arq.is_open()) // Se o arquivo de funções não for aberto, lança um error
         throw 0;
     string linha;
+    string matricula = "-";
     while (getline(arq, linha)) // Pega a linha do arquivo e armazena na string linha
     {                           // Compara a linha com cada função e a chama
         if (linha == "carregarEmpresa()")
@@ -172,15 +173,16 @@ void Empresa::carregarFuncoes() // Função para carregar funcoes
             imprimeDono();
         if (linha == "buscaFuncionario()")
         {
-            string matricula = escolherFuncionario(); // pega uma matricula aleatoria e depois simplifica
-            matricula = simplificadorMatricula(matricula);
+            // pega uma matricula aleatoria e depois simplifica
+         matricula = simplificadorMatricula(escolherFuncionario());
             buscaFuncionario(stoi(matricula)); // passa a matricula como inteiro pra função
+            matricula = "-";
         }
         if (linha == "calculaSalarioFuncionario()")
         {
-            string matricula = escolherFuncionario();
-            matricula = simplificadorMatricula(matricula);
-            cacularSalarioFuncionario(stoi(matricula));
+            matricula = simplificadorMatricula(escolherFuncionario());
+           cacularSalarioFuncionario(stoi(matricula));
+            matricula = "-";
         }
         if (linha == "calculaTodoOsSalarios()")
         {
@@ -189,9 +191,9 @@ void Empresa::carregarFuncoes() // Função para carregar funcoes
                 calcularTodoOsSalarios();
             }
             catch (int error)
-            { // Como a função escreve e lê no arquivo, é necessário conferir os dois
+            { // Como a função escreve e lê no arquivo, conferi os dois
                 if (error == 0)
-                    cout << "Error ao abrir o arquivo do relátorio para escrita" << endl;
+                    cout << "Error ao abrir o arquivo do relátorio" << endl;
                 if (error == 1)
                     cout << "Error ao abrir o arquivo do relátorio para leitura" << endl;
                 else
@@ -200,13 +202,22 @@ void Empresa::carregarFuncoes() // Função para carregar funcoes
         };
         if (linha == "calcularRecisao()")
         {
-            string matricula = escolherFuncionario();
-            matricula = simplificadorMatricula(matricula);
+        
+           
+    cout << matricula << endl;matricula = simplificadorMatricula(escolherFuncionario());
             Data data; // Pega números aleatorios para a data
-            data.dia = sorteioN(1, 31);
+            data.dia = sorteioN(1, 30);
             data.mes = sorteioN(1, 12);
             data.ano = 2023;
-            calcularRecisao(stoi(matricula), data);
+            try
+            {
+                 calcularRecisao(stoi(matricula), data);
+            }
+            catch (int e)
+            {
+                if (e == 1)
+                    cout << "A data de desligamento é inferior a data de ingresso" << endl;
+            }
             break;
         }
     }
@@ -244,17 +255,27 @@ void Empresa::carregarAsg() // Carrega ASG
     while (getline(arq, linha))
     { // Utiliza o contador como indice para salvar somente as linhas com informações
         if (contador != 21 && contador != 17 && contador != 13 && contador != 7 && contador > 2)
-            palavras.push_back(linha); // Salva no vector palavras as linhas com as informações
-        contador++;                    // Avança no contador
-        if (contador == 25)            // Quando chega no fim do ASG, ele reinicia a contagem para salvar o próximo
+        {
+            palavras.push_back(linha);
+        }
+        // Salva no vector palavras as linhas com as informações
+        contador++;         // Avança no contador
+        if (contador == 25) // Quando chega no fim do ASG, ele reinicia a contagem para salvar o próximo
         {
             contador = 0;
-            Asg asg(palavras[0], palavras[1], stoi(palavras[11]), stoi(palavras[10]),
-                    stoi(palavras[9]), palavras[4], palavras[6], palavras[7],
-                    palavras[5], stoi(palavras[8]), stoi(palavras[2]), stoi(palavras[14]),
-                    palavras[13], palavras[12], stoi(palavras[17]), stoi(palavras[16]),
-                    stoi(palavras[15]));
-            this->asgs.push_back(asg); // Cria o ASG, adiciona no fim do vector e depois limpa o vector, para armazenar o próximo ASG
+            try
+            {
+                Asg asg(palavras[0], palavras[1], stoi(palavras[11]), stoi(palavras[10]),
+                        stoi(palavras[9]), palavras[4], palavras[6], palavras[7],
+                        palavras[5], stoi(palavras[8]), stoi(palavras[2]), stof(palavras[14]),
+                        palavras[13], palavras[12], stoi(palavras[17]), stoi(palavras[16]),
+                        stoi(palavras[15]));
+                this->asgs.push_back(asg); // Cria o ASG, adiciona no fim do vector e depois limpa o vector, para armazenar o próximo ASG
+            }
+            catch (invalid_argument &e)
+            {
+                cout << "Não foi possivel carregar asg, erro ao converter um dos parametros para número" << endl;
+            }
             palavras.clear();
         }
     }
@@ -277,14 +298,22 @@ void Empresa::carregarVendedor() // Funciona da mesma forma do carregar ASG
         if (contador == 25)
         {
             contador = 0;
-            tipoVendedor = (palavras[14])[0];
-            Vendedor vendedor(palavras[0], palavras[1], palavras[3],
-                              stoi(palavras[11]), stoi(palavras[10]), stoi(palavras[9]), palavras[4],
-                              palavras[6], palavras[7], palavras[5],
-                              stoi(palavras[8]), stoi(palavras[2]), palavras[13],
-                              palavras[12], stoi(palavras[17]), stoi(palavras[16]),
-                              stoi(palavras[15]), tipoVendedor);
-            this->vendedores.push_back(vendedor);
+            tipoVendedor = (palavras[14])[0]; // Como a linha é uma string, ele pega apenas a primeira posição
+                                              // ai fica um char
+            try                               // Caso não consiga converter alguma linha, tive muito problema com isso ;)
+            {
+                Vendedor vendedor(palavras[0], palavras[1], palavras[3],
+                                  stoi(palavras[11]), stoi(palavras[10]), stoi(palavras[9]), palavras[4],
+                                  palavras[6], palavras[7], palavras[5],
+                                  stoi(palavras[8]), stoi(palavras[2]), palavras[13],
+                                  palavras[12], stoi(palavras[17]), stoi(palavras[16]),
+                                  stoi(palavras[15]), tipoVendedor);
+                this->vendedores.push_back(vendedor);
+            }
+            catch (invalid_argument &e)
+            {
+                cout << "Não foi possivel carregar vendedor, erro ao converter um dos parametros para número" << endl;
+            }
             palavras.clear();
         }
     }
@@ -307,19 +336,27 @@ void Empresa::carregarGerente() // Funciona da mesma forma do carregar ASG e Ven
 
         if (contador == 25)
         {
-            contador = 0;
-            Gerente gerente;
-            gerente.setNome(palavras[0]);
-            gerente.setCpf(palavras[1]);
-            gerente.setQuantFilhos(stoi(palavras[2]));
-            gerente.setEstadoCivil(palavras[3]);
-            gerente.setEnderecoPessoal(palavras[4], palavras[6], palavras[7], palavras[5], stoi(palavras[8]));
-            gerente.setDataNascimento(stoi(palavras[11]), stoi(palavras[10]), stoi(palavras[9]));
-            gerente.setMatricula(palavras[12]);
-            gerente.setSalario(palavras[13]);
-            gerente.setParticipacaoLucros(stof(palavras[14]));
-            gerente.setIngressoEmpresa(stoi(palavras[17]), stoi(palavras[16]), stoi(palavras[15]));
-            this->gerentes.push_back(gerente);
+            try
+            {
+                contador = 0;
+                Gerente gerente;
+                gerente.setNome(palavras[0]);
+                gerente.setCpf(palavras[1]);
+                gerente.setQuantFilhos(stoi(palavras[2]));
+                gerente.setEstadoCivil(palavras[3]);
+                gerente.setEnderecoPessoal(palavras[4], palavras[6], palavras[7], palavras[5], stoi(palavras[8]));
+                gerente.setDataNascimento(stoi(palavras[11]), stoi(palavras[10]), stoi(palavras[9]));
+                gerente.setMatricula(palavras[12]);
+                gerente.setSalario(palavras[13]);
+                gerente.setParticipacaoLucros(stof(palavras[14]));
+                gerente.setIngressoEmpresa(stoi(palavras[17]), stoi(palavras[16]), stoi(palavras[15]));
+
+                this->gerentes.push_back(gerente);
+            }
+            catch (invalid_argument &e)
+            {
+                cout << "Não foi possivel carregar gerente, erro ao converter um dos parametros para número" << endl;
+            }
             palavras.clear();
         }
     }
@@ -345,12 +382,19 @@ void Empresa::carregarDono() // Função para carregar dono
         }
         contador++;
     } // Muda os atributos do Dono
-    this->dono.setNome(palavras[0]);
-    this->dono.setCpf(palavras[1]);
-    this->dono.setEstadoCivil(palavras[3]);
-    this->dono.setEnderecoPessoal(palavras[4], palavras[6], palavras[7], palavras[5], stoi(palavras[8]));
-    this->dono.setDataNascimento(stoi(palavras[11]), stoi(palavras[10]), stoi(palavras[9]));
-    this->dono.setQuantFilhos(stoi(palavras[2]));
+    try
+    {
+        this->dono.setNome(palavras[0]);
+        this->dono.setCpf(palavras[1]);
+        this->dono.setEstadoCivil(palavras[3]);
+        this->dono.setEnderecoPessoal(palavras[4], palavras[6], palavras[7], palavras[5], stoi(palavras[8]));
+        this->dono.setDataNascimento(stoi(palavras[11]), stoi(palavras[10]), stoi(palavras[9]));
+        this->dono.setQuantFilhos(stoi(palavras[2]));
+    }
+    catch (invalid_argument &e)
+    {
+        cout << "Não foi possivel carregar dono, erro ao converter um dos parametros para número" << endl;
+    }
 };
 void Empresa::imprimeAsgs() // Imprime asgs
 {
@@ -427,19 +471,19 @@ void Empresa::imprimeDono() // Imprime Dono
 };
 void Empresa::buscaFuncionario(int matricula) // Busca Funcionario
 {
-    cout << "\nBuscar Funcionario\nMatricula:" << matricula << endl; //Informa que entrou na função e a matricula que vai buscar
+    cout << "\nBuscar Funcionario\nMatricula:" << matricula << endl; // Informa que entrou na função e a matricula que vai buscar
     Pessoa funcionario;
     bool encontrado = false;
-    string matriculaString = to_string(matricula); //Transforma a matricula em String
+    string matriculaString = to_string(matricula); // Transforma a matricula em String
     for (int i = 0; i < gerentes.size(); i++)
     {
-        string matriculaUser = simplificadorMatricula(this->gerentes[i].getMatricula());
+        string matriculaUser = simplificadorMatricula(this->gerentes[i].getMatricula()); // Simplifica a matricula p poder comparar
         if (matriculaUser == matriculaString)
         {
             cout << "Tipo de Funcionario: Gerente\n"
                  << endl;
-            funcionario = this->gerentes[i];
-            encontrado = true;
+            funcionario = this->gerentes[i]; // Salva o gerente achado em funcionario do tipo Pessoa
+            encontrado = true;               // Marca como encontrado
             break;
         }
     }
@@ -472,9 +516,9 @@ void Empresa::buscaFuncionario(int matricula) // Busca Funcionario
             }
         }
     }
-    if (!encontrado)
+    if (!encontrado) // Caso não tenha encontrado depois de conferir em todos
         cout << "Funcionario não encontrado no sistema!" << endl;
-    else
+    else // Mostra o funcionario encontrado
     {
         cout << "Nome: " << funcionario.getNome() << endl;
         cout << "Cpf: " << funcionario.getCpf() << endl;
@@ -485,22 +529,20 @@ void Empresa::buscaFuncionario(int matricula) // Busca Funcionario
         cout << "######################################" << endl;
     }
 };
-void Empresa::cacularSalarioFuncionario(int matricula)
+void Empresa::cacularSalarioFuncionario(int matricula) // Calcula o salario do funcionario
 {
     cout << "\nCalcular Salario Funcionario\n"
          << endl;
-    cout << "Matricula passada: " << matricula << endl;
-    string matriculaString = to_string(matricula);
+    cout << "Matricula passada: " << matricula << endl; // Mostra que entrou na função e a matricula
+    string matriculaString = to_string(matricula);      // do funcionario que vai calcular a matricula
     int posicao = 0, encontrado = 0;
-    // cout << "Matricula string" << matriculaString << endl;
-
     for (int i = 0; i < gerentes.size(); i++)
     {
-        string matriculaUser = simplificadorMatricula(this->gerentes[i].getMatricula());
+        string matriculaUser = simplificadorMatricula(this->gerentes[i].getMatricula()); // Simplifica a matricula
         if (matriculaUser == matriculaString)
         {
-            posicao = i;
-            encontrado = 1;
+            posicao = i;    // Salva a posição que está no vector
+            encontrado = 1; // Salva o tipo de funcionario
             break;
         }
     }
@@ -531,12 +573,12 @@ void Empresa::cacularSalarioFuncionario(int matricula)
         }
     }
     float salario;
-    if (encontrado == 0)
+    if (encontrado == 0) // Caso não encontre depois de checar em todos
         cout << "Funcionario não encontrado no sistema!" << endl;
-    if (encontrado == 1)
+    if (encontrado == 1) // Confere de qual tipo é o funcionario
     {
-        Gerente gerente = gerentes[posicao];
-        salario = gerente.calcularSalario(0);
+        Gerente gerente = gerentes[posicao];  // Puxa do vector pela posição e mostra os dados do usuario
+        salario = gerente.calcularSalario(0); // juntamente com o salario
         cout << "Nome: " << gerente.getNome();
         cout << " - Matricula: " << gerente.getMatricula();
         cout << " - CPF: " << gerente.getCpf();
@@ -561,33 +603,36 @@ void Empresa::cacularSalarioFuncionario(int matricula)
         cout << " - Salário: " << salario << endl;
     }
 };
-void Empresa::calcularTodoOsSalarios()
+void Empresa::calcularTodoOsSalarios() // Calcular todos os salarios
 {
     fstream arq;
-    cout << "\n";
+    cout << "\n"; // Só p ficar mais bonitinho :)
     arq.open("./Arquivos/relatatorio.txt", ios::out);
     if (!arq.is_open())
         throw 0;
     arq << "######### Relatório Financeiro ########\n"
-        << endl;
-
+        << endl; // Já começa a salva no arquivo
     double total = 0, totalGeral = 0;
-    arq << "Cargo:ASG" << endl;
-    for (int i = 0; i < asgs.size(); i++)
+    arq << "Cargo: ASG" << endl;          // COLOQUEI TODOS COM FALTA 0, JÁ QUE NÃO FOI INFORMADO
+    for (int i = 0; i < asgs.size(); i++) // Aqui começa a gravar todos os dados dos ASGS
     {
-        arq << asgs[i].getMatricula() << " - " << asgs[i].getNome() << " - R$ " << asgs[i].getSalario() << endl;
-        total += stod(asgs[i].getSalario());
-        if (i == asgs.size() - 1)
+        float salario = asgs[i].calcularSalario(0);
+        arq << asgs[i].getMatricula() << " - " << asgs[i].getNome() << " - R$ " << salario << endl;
+        total += salario;
+        if (i == asgs.size() - 1) // Quando chegar no ultimo
         {
-            arq << "Total ASG: R$ " << total << endl;
-            totalGeral += total;
-            total = 0;
+            arq << "Total ASG: R$ " << total << endl; // Grava o total
+            totalGeral += total;                      // E adiciona no total geral
+            total = 0;                                // Zera a variavel para o próximo tipo
         }
     }
+    arq << "" << endl;
+    arq << "Cargo: Vendedor" << endl;
     for (int i = 0; i < vendedores.size(); i++)
     {
-        arq << vendedores[i].getMatricula() << " - " << vendedores[i].getNome() << " - R$ " << vendedores[i].getSalario() << endl;
-        total += stod(vendedores[i].getSalario());
+        float salario = vendedores[i].calcularSalario(0);
+        arq << vendedores[i].getMatricula() << " - " << vendedores[i].getNome() << " - R$ " << salario << endl;
+        total += salario;
         if (i == vendedores.size() - 1)
         {
             arq << "Total Vendedores: R$ " << total << endl;
@@ -595,10 +640,13 @@ void Empresa::calcularTodoOsSalarios()
             total = 0;
         }
     }
+    arq << "" << endl;
+    arq << "Cargo: Gerente" << endl;
     for (int i = 0; i < gerentes.size(); i++)
     {
-        arq << gerentes[i].getMatricula() << " - " << gerentes[i].getNome() << " - R$ " << gerentes[i].getSalario() << endl;
-        total += stod(gerentes[i].getSalario());
+        float salario = gerentes[i].calcularSalario(0);
+        arq << gerentes[i].getMatricula() << " - " << gerentes[i].getNome() << " - R$ " << salario << endl;
+        total += salario;
         if (i == gerentes.size() - 1)
         {
             arq << "Total Gerentes: R$ " << total << endl;
@@ -606,17 +654,17 @@ void Empresa::calcularTodoOsSalarios()
             total = 0;
         }
     }
-
-    arq << "CUSTO TOTAL DE RH: R$ " << totalGeral << endl;
+    arq << "" << endl;
+    arq << "CUSTO TOTAL DE RH: R$ " << totalGeral << endl; // Grava o total geral
     arq.close();
     arq.open("./Arquivos/relatatorio.txt", ios::in);
     if (!arq.is_open())
-        throw 1;
+        throw 0;
     string linha;
-    while (getline(arq, linha))
+    while (getline(arq, linha)) // Lê todo o arquivo p imprimir pro usuario
         cout << linha << endl;
 };
-void Empresa::calcularRecisao(int matricula, Data desligamento)
+void Empresa::calcularRecisao(int matricula, Data desligamento) // Calcula a recisão
 {
     cout << "\nCalcular Recisão\nMatricula:" << matricula << endl;
     int encontrado = 0;
@@ -669,26 +717,46 @@ void Empresa::calcularRecisao(int matricula, Data desligamento)
     float salario;
     if (encontrado == 0)
         cout << "Funcionario não encontrado no sistema!" << endl;
-    if (encontrado == 1)
+    if (encontrado == 1) // Verifica o tipo e calcula a recisão
     {
-        salario = gerentes[posicao].calcularRecisao(desligamento);
-        cout << "Nome: " << gerentes[posicao].getNome() << "\nMatricula: " << gerentes[posicao].getMatricula();
-        cout << "\nCpf: " << gerentes[posicao].getCpf() << "\nData Ingresso: " << gerentes[posicao].getIngressoEmpresa().dia << "/" << gerentes[posicao].getIngressoEmpresa().mes << "/" << gerentes[posicao].getIngressoEmpresa().ano;
-        cout << "\nData saida:" << desligamento.dia << "/" << desligamento.mes << "/" << desligamento.ano << "\nRecisão: " << salario << endl;
+        if (desligamento.ano < gerentes[posicao].getIngressoEmpresa().ano) // Verifica se o desligamento não é antes do ingresso
+        {
+            throw 1;
+        }
+        else
+        {
+            salario = gerentes[posicao].calcularRecisao(desligamento);
+            cout << "Nome: " << gerentes[posicao].getNome() << "\nMatricula: " << gerentes[posicao].getMatricula();
+            cout << "\nCpf: " << gerentes[posicao].getCpf() << "\nData Ingresso: " << gerentes[posicao].getIngressoEmpresa().dia << "/" << gerentes[posicao].getIngressoEmpresa().mes << "/" << gerentes[posicao].getIngressoEmpresa().ano;
+            cout << "\nData saida:" << desligamento.dia << "/" << desligamento.mes << "/" << desligamento.ano << "\nRecisão: " << salario << endl;
+        }
     }
     if (encontrado == 2)
     {
-        salario = vendedores[posicao].calcularRecisao(desligamento);
-        cout << "Nome: " << vendedores[posicao].getNome() << "\nMatricula: " << vendedores[posicao].getMatricula();
-        cout << "\nCpf: " << vendedores[posicao].getCpf() << "\nData Ingresso: " << vendedores[posicao].getIngressoEmpresa().dia << "/" << vendedores[posicao].getIngressoEmpresa().mes << "/" << vendedores[posicao].getIngressoEmpresa().ano;
-        cout << "\nData saida:" << desligamento.dia << "/" << desligamento.mes << "/" << desligamento.ano << "\nRecisão: " << salario << endl;
+        if (desligamento.ano < gerentes[posicao].getIngressoEmpresa().ano)
+        {
+            throw 1;
+        }
+        else
+        {
+            salario = vendedores[posicao].calcularRecisao(desligamento);
+            cout << "Nome: " << vendedores[posicao].getNome() << "\nMatricula: " << vendedores[posicao].getMatricula();
+            cout << "\nCpf: " << vendedores[posicao].getCpf() << "\nData Ingresso: " << vendedores[posicao].getIngressoEmpresa().dia << "/" << vendedores[posicao].getIngressoEmpresa().mes << "/" << vendedores[posicao].getIngressoEmpresa().ano;
+            cout << "\nData saida:" << desligamento.dia << "/" << desligamento.mes << "/" << desligamento.ano << "\nRecisão: " << salario << endl;
+        }
     }
     if (encontrado == 3)
     {
-
-        salario = asgs[posicao].calcularRecisao(desligamento);
-        cout << "Nome: " << asgs[posicao].getNome() << "\nMatricula: " << asgs[posicao].getMatricula();
-        cout << "\nCpf: " << asgs[posicao].getCpf() << "\nData Ingresso: " << asgs[posicao].getIngressoEmpresa().dia << "/" << asgs[posicao].getIngressoEmpresa().mes << "/" << asgs[posicao].getIngressoEmpresa().ano;
-        cout << "\nData saida:" << desligamento.dia << "/" << desligamento.mes << "/" << desligamento.ano << "\nRecisão: " << salario << endl;
+        if (desligamento.ano < gerentes[posicao].getIngressoEmpresa().ano)
+        {
+            throw 1;
+        }
+        else
+        {
+            salario = asgs[posicao].calcularRecisao(desligamento);
+            cout << "Nome: " << asgs[posicao].getNome() << "\nMatricula: " << asgs[posicao].getMatricula();
+            cout << "\nCpf: " << asgs[posicao].getCpf() << "\nData Ingresso: " << asgs[posicao].getIngressoEmpresa().dia << "/" << asgs[posicao].getIngressoEmpresa().mes << "/" << asgs[posicao].getIngressoEmpresa().ano;
+            cout << "\nData saida:" << desligamento.dia << "/" << desligamento.mes << "/" << desligamento.ano << "\nRecisão: " << salario << endl;
+        }
     }
 };

@@ -16,7 +16,6 @@ int main(int argc, char const *argv[])
     {
         std::cerr << "Não foi possivel útilizar a data passada, tente novamente." << '\n';
     }
-cout << "Passou aqui" << endl;
     Empresa *atacadoDosCalcado = new Empresa("Atacado dos Calçados", "40.101.588/0001-98", 156289.56, dataHoje);
     try
     {

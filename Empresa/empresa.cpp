@@ -201,10 +201,7 @@ void Empresa::carregarFuncoes() // Função para carregar funcoes
             }
         };
         if (linha == "calcularRecisao()")
-        {
-        
-           
-    cout << matricula << endl;matricula = simplificadorMatricula(escolherFuncionario());
+        {matricula = simplificadorMatricula(escolherFuncionario());
             Data data; // Pega números aleatorios para a data
             data.dia = sorteioN(1, 30);
             data.mes = sorteioN(1, 12);
